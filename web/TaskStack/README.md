@@ -1,59 +1,78 @@
 # TaskStack
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.1.
+TaskStack is a local-first “task stack” (LIFO) that helps you resume context quickly when you get interrupted.
 
-## Development server
+## License
 
-To start a local development server, run:
+This repository is published for viewing and personal learning/evaluation only. Redistribution is not permitted. See the `LICENSE` file at the repo root.
+
+It is intentionally **not** a backlog manager and **not** a prioritized task list. The goal is to make it fast to:
+
+- Start what you’re focusing on right now
+- Switch to a new interruption without losing the previous context
+- Return to a prior task with the right notes/history
+
+## Core Concept
+
+At any moment there is a single **Active** task at the top of the stack.
+
+- Starting a new task pushes the current active task down the stack (paused) and makes the new task active.
+- Resuming a task from within the stack promotes it to the top.
+- Completing the active task removes it from the stack and moves it to **Archive**, preserving its history.
+
+This makes the active stack a short-lived “working memory” buffer — ideally it trends toward empty at the end of the day.
+
+## Workflow (Typical)
+
+1. **Start task**: type a title and hit Enter → becomes the active task.
+2. **Interrupted**: start a new task → the previous task remains just below it.
+3. **Resume**: pick a task lower in the stack → it becomes active again.
+4. **Complete**: pop the active task → it moves to Archive so you can look back later.
+
+## Data & History
+
+Each task keeps a lightweight event history (e.g., started/resumed/completed timestamps). This is meant to preserve context without requiring heavy process.
+
+## Local-first
+
+TaskStack is designed to run without a server.
+
+- Early versions may use in-memory state.
+- Persistence is planned via “simple file storage” (a user-selected `*.taskstack.json` file).
+
+## Project Notes
+
+- Stories and acceptance criteria live in `docs/stories/`.
+- The app is built with Angular.
+
+## Development
+
+This project was generated using Angular CLI.
+
+### Dev server
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open `http://localhost:4200/`. The app reloads on source changes.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### Build
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Outputs to `dist/`.
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### Unit tests
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+### Angular CLI help
 
 ```bash
-ng e2e
+ng generate --help
 ```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
