@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { tasks, type TaskState } from '../stores/tasks';
-  let state: TaskState;
+  import { tasks } from '../stores/tasks';
 </script>
 
 <section class="panel archive">
@@ -8,9 +7,9 @@
     <h2>Archive</h2>
   </header>
 
-  {#if state?.archive.length > 0}
+  {#if $tasks.archive.length > 0}
     <ul class="list">
-      {#each state.archive as t}
+      {#each $tasks.archive as t}
         <li>
           <span class="title">{t.title}</span>
           <button on:click={() => tasks.resumeTask(t.id)}>Resume</button>
@@ -44,6 +43,3 @@
   .title { font-weight: 500; }
   .empty { color: var(--muted); }
 </style>
-
-<!-- store subscription -->
-<svelte:window on:load={() => tasks.subscribe((s) => (state = s))} />

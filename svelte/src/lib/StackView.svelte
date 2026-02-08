@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { tasks, type TaskState } from '../stores/tasks';
-  let state: TaskState;
-  $: active = state?.stack[state.stack.length - 1];
+  import { tasks } from '../stores/tasks';
+  $: active = $tasks.stack[$tasks.stack.length - 1];
 </script>
 
 <section class="panel stack">
@@ -10,10 +9,10 @@
     <button on:click={() => tasks.popActiveToArchive()} disabled={!active}>Pop Active -> Archive</button>
   </header>
 
-  {#if state?.stack.length > 0}
+  {#if $tasks.stack.length > 0}
     <ol class="list">
-      {#each state.stack as t, i}
-        <li class:active={i === state.stack.length - 1}>
+      {#each $tasks.stack as t, i}
+        <li class:active={i === $tasks.stack.length - 1}>
           <span class="title">{t.title}</span>
           <time datetime={new Date(t.createdAt).toISOString()}>{new Date(t.createdAt).toLocaleString()}</time>
         </li>
@@ -53,6 +52,3 @@
   .title { font-weight: 600; }
   .empty { color: var(--muted); }
 </style>
-
-<!-- store subscription -->
-<svelte:window on:load={() => tasks.subscribe((s) => (state = s))} />
