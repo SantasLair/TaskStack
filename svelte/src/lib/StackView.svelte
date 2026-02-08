@@ -1,6 +1,6 @@
 <script lang="ts">
   import { tasks } from '../stores/tasks';
-  $: active = $tasks.stack[$tasks.stack.length - 1];
+  $: active = $tasks.stack[0];
 </script>
 
 <section class="panel stack">
@@ -12,7 +12,7 @@
   {#if $tasks.stack.length > 0}
     <ol class="list">
       {#each $tasks.stack as t, i}
-        <li class:active={i === $tasks.stack.length - 1}>
+        <li class:active={i === 0}>
           <span class="title">{t.title}</span>
           <time datetime={new Date(t.createdAt).toISOString()}>{new Date(t.createdAt).toLocaleString()}</time>
         </li>

@@ -7,7 +7,7 @@ export type Task = {
 };
 
 export type TaskState = {
-  stack: Task[]; // last item is the active/top of stack
+  stack: Task[]; // first item is the active/top of stack
   archive: Task[];
 };
 
@@ -57,14 +57,13 @@ function createTaskStore() {
       if (!trimmed) return;
       update((s) => ({
         ...s,
-        stack: [...s.stack, { id: uid(), title: trimmed, createdAt: Date.now() }],
+        stack: [{ id: uid(), title: trimmed, createdAt: Date.now() }, ...s.stack],
       }));
     },
     popActiveToArchive() {
       update((s) => {
         if (s.stack.length === 0) return s;
-        const nextStack = s.stack.slice(0, -1);
-        const active = s.stack[s.stack.length - 1];
+        const [active, ...nextStack] = s.stack;
         return { ...s, stack: nextStack, archive: [active, ...s.archive] };
       });
     },
@@ -73,7 +72,7 @@ function createTaskStore() {
         const idx = s.archive.findIndex((t) => t.id === id);
         if (idx === -1) return s;
         const [restored] = s.archive.splice(idx, 1);
-        return { ...s, stack: [...s.stack, restored], archive: [...s.archive] };
+        return { ...s, stack: [restored, ...s.stack], archive: [...s.archive] };
       });
     },
     clearAll() {
