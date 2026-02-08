@@ -22,8 +22,10 @@
 
 <style>
   .notes {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 0.75rem;
+    min-height: 320px;
   }
   header {
     display: flex;
@@ -37,6 +39,7 @@
   }
   textarea {
     resize: vertical;
+    flex: 1;
     min-height: 220px;
     border: 1px solid var(--border);
     border-radius: 12px;
