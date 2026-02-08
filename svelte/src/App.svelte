@@ -1,8 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { tasks } from './stores/tasks';
   import TaskInput from './lib/TaskInput.svelte';
   import StackView from './lib/StackView.svelte';
-  import ArchiveView from './lib/ArchiveView.svelte';
+  import NotesPanel from './lib/NotesPanel.svelte';
+  import ArchiveDrawer from './lib/ArchiveDrawer.svelte';
 
   type Theme = 'warm' | 'neon' | 'studio';
   const themes: { id: Theme; label: string }[] = [
@@ -13,6 +15,7 @@
 
   const THEME_KEY = 'taskstack:theme';
   let theme: Theme = 'warm';
+  let drawerOpen = false;
 
   function applyTheme(id: Theme) {
     theme = id;
@@ -77,9 +80,15 @@
   <TaskInput />
   <div class="grid">
     <StackView />
-    <ArchiveView />
+    <NotesPanel />
   </div>
 </main>
+
+<ArchiveDrawer
+  open={drawerOpen}
+  count={$tasks.archive.length}
+  on:toggle={(e) => (drawerOpen = e.detail)}
+/>
 
 <style>
   .app {

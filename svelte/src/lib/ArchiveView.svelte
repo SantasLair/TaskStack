@@ -2,7 +2,7 @@
   import { tasks } from '../stores/tasks';
 </script>
 
-<section class="panel archive">
+<section class="archive">
   <header>
     <h2>Archive</h2>
   </header>

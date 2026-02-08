@@ -4,6 +4,7 @@ export type Task = {
   id: string;
   title: string;
   createdAt: number;
+  notes?: string;
 };
 
 export type TaskState = {
@@ -57,7 +58,7 @@ function createTaskStore() {
       if (!trimmed) return;
       update((s) => ({
         ...s,
-        stack: [{ id: uid(), title: trimmed, createdAt: Date.now() }, ...s.stack],
+        stack: [{ id: uid(), title: trimmed, createdAt: Date.now(), notes: '' }, ...s.stack],
       }));
     },
     popActiveToArchive() {
@@ -69,10 +70,21 @@ function createTaskStore() {
     },
     resumeTask(id: string) {
       update((s) => {
-        const idx = s.archive.findIndex((t) => t.id === id);
-        if (idx === -1) return s;
-        const [restored] = s.archive.splice(idx, 1);
-        return { ...s, stack: [restored, ...s.stack], archive: [...s.archive] };
+        const restored = s.archive.find((t) => t.id === id);
+        if (!restored) return s;
+        return {
+          ...s,
+          stack: [restored, ...s.stack],
+          archive: s.archive.filter((t) => t.id !== id),
+        };
+      });
+    },
+    updateActiveNotes(notes: string) {
+      update((s) => {
+        if (s.stack.length === 0) return s;
+        const [active, ...rest] = s.stack;
+        const nextActive = { ...active, notes };
+        return { ...s, stack: [nextActive, ...rest] };
       });
     },
     clearAll() {
