@@ -1,47 +1,26 @@
 <script lang="ts">
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-  import Counter from './lib/Counter.svelte'
+  import TaskInput from './lib/TaskInput.svelte';
+  import StackView from './lib/StackView.svelte';
+  import ArchiveView from './lib/ArchiveView.svelte';
 </script>
 
-<main>
-  <div>
-    <a href="https://vite.dev" target="_blank" rel="noreferrer">
-      <img src={viteLogo} class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte</h1>
+<main class="app">
+  <header class="top">
+    <h1>TaskStack</h1>
+    <p class="subtitle">Lightweight task stack with archive & resume</p>
+  </header>
 
-  <div class="card">
-    <Counter />
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
+  <TaskInput />
+  <StackView />
+  <ArchiveView />
 </main>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
+  .app {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 1rem;
   }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
-  }
+  .top { margin-bottom: 1rem; }
+  .subtitle { color: #666; }
 </style>
