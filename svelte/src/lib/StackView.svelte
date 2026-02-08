@@ -4,10 +4,10 @@
   $: active = state?.stack[state.stack.length - 1];
 </script>
 
-<section class="stack">
+<section class="panel stack">
   <header>
     <h2>Active Stack</h2>
-    <button on:click={() => tasks.popActiveToArchive()} disabled={!active}>Pop Active → Archive</button>
+    <button on:click={() => tasks.popActiveToArchive()} disabled={!active}>Pop Active -> Archive</button>
   </header>
 
   {#if state?.stack.length > 0}
@@ -42,15 +42,16 @@
     grid-template-columns: 1fr auto;
     align-items: center;
     padding: 0.5rem 0.75rem;
-    border: 1px solid #eee;
-    border-radius: 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--input-bg);
   }
   .list li.active {
-    border-color: #ff3e00;
-    box-shadow: 0 0 0 2px #ff3e0033;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--ring);
   }
   .title { font-weight: 600; }
-  .empty { color: #777; }
+  .empty { color: var(--muted); }
 </style>
 
 <!-- store subscription -->

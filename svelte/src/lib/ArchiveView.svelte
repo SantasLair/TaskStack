@@ -3,7 +3,7 @@
   let state: TaskState;
 </script>
 
-<section class="archive">
+<section class="panel archive">
   <header>
     <h2>Archive</h2>
   </header>
@@ -37,11 +37,12 @@
     grid-template-columns: 1fr auto;
     align-items: center;
     padding: 0.5rem 0.75rem;
-    border: 1px solid #eee;
-    border-radius: 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--input-bg);
   }
   .title { font-weight: 500; }
-  .empty { color: #777; }
+  .empty { color: var(--muted); }
 </style>
 
 <!-- store subscription -->
