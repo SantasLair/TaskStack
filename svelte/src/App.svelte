@@ -1,10 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { tick } from 'svelte';
   import { tasks } from './stores/tasks';
   import TaskInput from './lib/TaskInput.svelte';
   import StackView from './lib/StackView.svelte';
   import NotesPanel from './lib/NotesPanel.svelte';
   import ArchiveDrawer from './lib/ArchiveDrawer.svelte';
+  import MobileIconBar from './lib/MobileIconBar.svelte';
+  import AboutPage from './lib/AboutPage.svelte';
 
   type Theme = 'warm' | 'neon' | 'studio';
   const themes: { id: Theme; label: string }[] = [
@@ -16,6 +19,51 @@
   const THEME_KEY = 'taskstack:theme';
   let theme: Theme = 'warm';
   let drawerOpen = false;
+  let taskInputRef: TaskInput;
+  let page: 'main' | 'about' = 'main';
+
+  function setPage(next: 'main' | 'about') {
+    page = next;
+    const nextHash = next === 'about' ? '#about' : '';
+    if (location.hash !== nextHash) {
+      history.replaceState(null, '', `${location.pathname}${location.search}${nextHash}`);
+    }
+  }
+
+  function scrollToId(id: string) {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const header = document.querySelector('.top-bar') as HTMLElement | null;
+    const headerHeight = header ? header.getBoundingClientRect().height : 0;
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    const y = Math.max(0, top - headerHeight - 12);
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+
+  async function jump(target: 'home' | 'stack' | 'notes' | 'about') {
+    drawerOpen = false;
+    if (target === 'home') {
+      setPage('main');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      taskInputRef?.focus({ preventScroll: true });
+      return;
+    }
+    if (target === 'stack') {
+      setPage('main');
+      await tick();
+      scrollToId('stack-panel');
+      return;
+    }
+    if (target === 'notes') {
+      setPage('main');
+      await tick();
+      scrollToId('notes-panel');
+      return;
+    }
+    setPage('about');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   function updateFavicon() {
     const link = document.querySelector('link[rel="icon"]') as HTMLLinkElement | null;
@@ -39,6 +87,13 @@
     } else {
       applyTheme('warm');
     }
+
+    const syncFromHash = () => {
+      setPage(location.hash === '#about' ? 'about' : 'main');
+    };
+    syncFromHash();
+    window.addEventListener('hashchange', syncFromHash);
+    return () => window.removeEventListener('hashchange', syncFromHash);
   });
 </script>
 
@@ -90,34 +145,34 @@
     </div>
   </header>
 
-  <TaskInput />
-  <div class="grid">
-    <StackView />
-    <NotesPanel />
-  </div>
-
-  <section id="about" class="panel about">
-    <h2>About</h2>
-    <p>
-      TaskStack is a local-first task stack (LIFO) that helps you capture what you are
-      doing now, switch to interruptions, and resume with the right context.
-    </p>
-    <p>
-      Contact: <a href="mailto:damon.ellerbee@gmail.com">damon.ellerbee@gmail.com</a>
-    </p>
-    <p>
-      LinkedIn: <a href="https://www.linkedin.com/in/damon-ellerbee/" rel="noopener noreferrer" target="_blank">damon-ellerbee</a>
-    </p>
-    <p>
-      Creator Page: <a href="https://damonellerbee.com" rel="noopener noreferrer" target="_blank">damonellerbee.com</a>
-    </p>
-  </section>
+  {#if page === 'about'}
+    <AboutPage />
+  {:else}
+    <div id="task-input">
+      <TaskInput bind:this={taskInputRef} />
+    </div>
+    <div class="grid">
+      <div id="stack-panel">
+        <StackView />
+      </div>
+      <div id="notes-panel">
+        <NotesPanel />
+      </div>
+    </div>
+    <div class="scroll-spacer" aria-hidden="true"></div>
+  {/if}
 </main>
 
 <ArchiveDrawer
   open={drawerOpen}
   count={$tasks.archive.length}
   on:toggle={(e) => (drawerOpen = e.detail)}
+/>
+
+<MobileIconBar
+  archiveOpen={drawerOpen}
+  on:toggleArchive={() => (drawerOpen = !drawerOpen)}
+  on:jump={(e) => jump(e.detail.target)}
 />
 
 <style>
@@ -142,10 +197,14 @@
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
+    min-width: 0;
   }
   .brand-name {
     font-weight: 700;
     letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .brand-icon {
     width: 28px;
@@ -200,16 +259,15 @@
     grid-template-columns: 1.2fr 0.8fr;
     gap: 1rem;
   }
-  .about {
-    margin-top: 1rem;
+
+  .scroll-spacer {
+    height: 0;
   }
 
   @media (max-width: 820px) {
-    .top-bar {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .theme-switch { justify-items: start; }
     .grid { grid-template-columns: 1fr; }
+    .scroll-spacer {
+      height: min(40vh, 320px);
+    }
   }
 </style>

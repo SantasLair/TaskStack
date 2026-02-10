@@ -5,7 +5,7 @@
 
 <section class="panel stack">
   <header>
-    <h2>Active Stack</h2>
+    <h2>Stack</h2>
     <button on:click={() => tasks.popActiveToArchive()} disabled={!active}>Pop Active -> Archive</button>
   </header>
 

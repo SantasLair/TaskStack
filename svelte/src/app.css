@@ -24,6 +24,7 @@
   --input-text: #2b2520;
   --page-x: 1.5rem;
   --page-y: 2rem;
+  --mobile-bar-height: 64px;
 }
 
 [data-theme='neon'] {
@@ -137,5 +138,11 @@ button:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
     --page-x: 1rem;
     --page-y: 1.25rem;
     padding: var(--page-y) var(--page-x) 2rem;
+  }
+}
+
+@media (max-width: 820px) {
+  #app {
+    padding-bottom: calc(var(--page-y) + var(--mobile-bar-height) + env(safe-area-inset-bottom, 0px));
   }
 }

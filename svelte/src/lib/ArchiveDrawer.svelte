@@ -1,14 +1,26 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
+  import { tick } from 'svelte';
   import ArchiveView from './ArchiveView.svelte';
 
   export let open = false;
   export let count = 0;
 
+  let panelEl: HTMLDivElement | null = null;
+
   const dispatch = createEventDispatcher<{ toggle: boolean }>();
 
   function toggle() {
     dispatch('toggle', !open);
+  }
+
+  async function resetScrollToTop() {
+    await tick();
+    panelEl?.scrollTo({ top: 0 });
+  }
+
+  $: if (open) {
+    resetScrollToTop();
   }
 </script>
 
@@ -22,7 +34,7 @@
     <span class="label">Archive</span>
     <span class="count">{count}</span>
   </button>
-  <div class="panel">
+  <div class="panel" bind:this={panelEl}>
     <ArchiveView />
   </div>
 </aside>
@@ -83,7 +95,8 @@
       top: auto;
       bottom: 0;
       width: 100%;
-      transform: translateY(calc(100% - 44px));
+      height: calc(100dvh - var(--mobile-bar-height));
+      transform: translateY(100%);
       right: 0;
     }
     .drawer.open {
@@ -92,15 +105,14 @@
     .panel {
       border-radius: 16px 16px 0 0;
       border-right: 1px solid var(--border);
+      height: 100%;
+      max-height: 100%;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: calc(1rem + var(--mobile-bar-height) + env(safe-area-inset-bottom, 0px));
     }
     .tab {
-      left: 16px;
-      top: -36px;
-      width: 120px;
-      height: 36px;
-      border-radius: 12px 12px 0 0;
-      border-right: 1px solid var(--border);
-      grid-auto-flow: column;
+      display: none;
     }
     .label {
       writing-mode: horizontal-tb;

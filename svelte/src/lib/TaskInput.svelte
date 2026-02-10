@@ -1,32 +1,31 @@
 <script lang="ts">
   import { tasks } from '../stores/tasks';
   let title = '';
+  let inputEl: HTMLInputElement | null = null;
 
   function submit(e: Event) {
     e.preventDefault();
     tasks.addTask(title);
     title = '';
   }
+
+  export function focus(options?: FocusOptions) {
+    inputEl?.focus(options);
+  }
 </script>
 
 <form on:submit|preventDefault={submit} class="task-input panel">
-  <header class="task-input-header">
-    <h2>Current Task</h2>
-    <p class="hint">What are you doing now?</p>
-  </header>
   <div class="input-row">
     <input
       type="text"
       placeholder="What are you doing now?"
       bind:value={title}
+      bind:this={inputEl}
       aria-label="Current task"
     />
   </div>
   <div class="actions">
     <button type="submit">Add</button>
-    <button type="button" class="btn-ghost" on:click={() => tasks.popActiveToArchive()} disabled>
-      Pop Active -> Archive
-    </button>
   </div>
 </form>
 
