@@ -91,7 +91,12 @@
     </p>
     <p>
       Contact: <a href="mailto:damon.ellerbee@gmail.com">damon.ellerbee@gmail.com</a>
-      · <a href="https://damonellerbee.com" rel="noopener noreferrer" target="_blank">damonellerbee.com</a>
+    </p>
+    <p>
+      LinkedIn: <a href="https://www.linkedin.com/in/damon-ellerbee/" rel="noopener noreferrer" target="_blank">damon-ellerbee</a>
+    </p>
+    <p>
+      Creator Page: <a href="https://damonellerbee.com" rel="noopener noreferrer" target="_blank">damonellerbee.com</a>
     </p>
   </section>
 </main>
