@@ -82,6 +82,18 @@
     <StackView />
     <NotesPanel />
   </div>
+
+  <section id="about" class="panel about">
+    <h2>About</h2>
+    <p>
+      TaskStack is a local-first task stack (LIFO) that helps you capture what you are
+      doing now, switch to interruptions, and resume with the right context.
+    </p>
+    <p>
+      Contact: <a href="mailto:damon.ellerbee@gmail.com">damon.ellerbee@gmail.com</a>
+      · <a href="https://damonellerbee.com" rel="noopener noreferrer" target="_blank">damonellerbee.com</a>
+    </p>
+  </section>
 </main>
 
 <ArchiveDrawer
@@ -145,6 +157,9 @@
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
     gap: 1rem;
+  }
+  .about {
+    margin-top: 1rem;
   }
 
   @media (max-width: 820px) {
