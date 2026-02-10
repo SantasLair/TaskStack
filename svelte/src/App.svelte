@@ -17,10 +17,19 @@
   let theme: Theme = 'warm';
   let drawerOpen = false;
 
+  function updateFavicon() {
+    const link = document.querySelector('link[rel="icon"]') as HTMLLinkElement | null;
+    if (!link) return;
+    const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#c45b36';
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect x="8" y="8" width="28" height="18" rx="3" fill="${accent}" /><rect x="12" y="14" width="28" height="18" rx="3" fill="${accent}" /><rect x="16" y="20" width="28" height="18" rx="3" fill="${accent}" /></svg>`;
+    link.href = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+  }
+
   function applyTheme(id: Theme) {
     theme = id;
     document.documentElement.dataset.theme = id;
     localStorage.setItem(THEME_KEY, id);
+    updateFavicon();
   }
 
   onMount(() => {
@@ -34,10 +43,14 @@
 </script>
 
 <main class="app">
-  <header class="top">
-    <div>
-      <h1>TaskStack</h1>
-      <p class="subtitle">Lightweight task stack with archive and resume</p>
+  <header class="top-bar">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <rect x="8" y="8" width="28" height="18" rx="3" />
+        <rect x="12" y="14" width="28" height="18" rx="3" />
+        <rect x="16" y="20" width="28" height="18" rx="3" />
+      </svg>
+      <span class="brand-name">TaskStack</span>
     </div>
     <div class="theme-switch" role="group" aria-label="Theme selection">
       <button
@@ -112,12 +125,36 @@
     display: grid;
     gap: 1rem;
   }
-  .top {
+  .top-bar {
     display: flex;
-    align-items: end;
+    align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 0.25rem;
+    margin: calc(-1 * var(--page-y)) calc(-1 * var(--page-x)) 1rem;
+    padding: 0.75rem var(--page-x);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .brand-name {
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  .brand-icon {
+    width: 28px;
+    height: 28px;
+    fill: var(--accent);
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.12));
+  }
+  .hero {
+    margin-top: 0.5rem;
   }
   .subtitle { color: var(--muted); }
   .theme-switch {
@@ -168,7 +205,7 @@
   }
 
   @media (max-width: 820px) {
-    .top {
+    .top-bar {
       flex-direction: column;
       align-items: flex-start;
     }

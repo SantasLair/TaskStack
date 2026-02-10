@@ -22,6 +22,8 @@
   --shadow: 0 12px 30px rgba(43, 37, 32, 0.12);
   --input-bg: #fff;
   --input-text: #2b2520;
+  --page-x: 1.5rem;
+  --page-y: 2rem;
 }
 
 [data-theme='neon'] {
@@ -38,6 +40,8 @@
   --shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
   --input-bg: #0f1628;
   --input-text: #eef6ff;
+  --page-x: 1.5rem;
+  --page-y: 2rem;
 }
 
 [data-theme='studio'] {
@@ -54,6 +58,8 @@
   --shadow: 0 12px 28px rgba(22, 41, 48, 0.12);
   --input-bg: #ffffff;
   --input-text: #1f2a30;
+  --page-x: 1.5rem;
+  --page-y: 2rem;
 }
 
 * { box-sizing: border-box; }
@@ -82,7 +88,7 @@ h1, h2 {
 #app {
   max-width: 980px;
   margin: 0 auto;
-  padding: 2rem 1.5rem 3rem;
+  padding: var(--page-y) var(--page-x) 3rem;
 }
 
 .panel {
@@ -127,5 +133,9 @@ button:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
 }
 
 @media (max-width: 720px) {
-  #app { padding: 1.25rem 1rem 2rem; }
+  #app {
+    --page-x: 1rem;
+    --page-y: 1.25rem;
+    padding: var(--page-y) var(--page-x) 2rem;
+  }
 }

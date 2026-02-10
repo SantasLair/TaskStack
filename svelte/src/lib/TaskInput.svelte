@@ -10,29 +10,54 @@
 </script>
 
 <form on:submit|preventDefault={submit} class="task-input panel">
-  <input
-    type="text"
-    placeholder="Add a task..."
-    bind:value={title}
-    aria-label="Task title"
-  />
-  <button type="submit">Add</button>
-  <button type="button" class="btn-ghost" on:click={() => tasks.popActiveToArchive()} disabled>
-    Pop Active -> Archive
-  </button>
+  <header class="task-input-header">
+    <h2>Current Task</h2>
+    <p class="hint">What are you doing now?</p>
+  </header>
+  <div class="input-row">
+    <input
+      type="text"
+      placeholder="What are you doing now?"
+      bind:value={title}
+      aria-label="Current task"
+    />
+  </div>
+  <div class="actions">
+    <button type="submit">Add</button>
+    <button type="button" class="btn-ghost" on:click={() => tasks.popActiveToArchive()} disabled>
+      Pop Active -> Archive
+    </button>
+  </div>
 </form>
 
 <style>
   .task-input {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .task-input-header h2 {
+    margin-bottom: 0.1rem;
+  }
+  .hint {
+    margin: 0;
+    color: var(--muted);
+  }
+  .input-row input {
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 0.9rem 1rem;
+    border-radius: 14px;
+  }
+  .actions {
     display: flex;
     gap: 0.5rem;
-  }
-  input {
-    flex: 1;
-    min-width: 0;
+    align-items: center;
+    flex-wrap: wrap;
   }
   @media (max-width: 720px) {
-    .task-input { flex-wrap: wrap; }
-    .task-input button { flex: 1 1 140px; }
+    .actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
   }
 </style>
